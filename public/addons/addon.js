@@ -2132,7 +2132,13 @@
     if (canDel) items += '<button class="bca-navmenu-item bca-danger-item" data-mi="del" type="button">' + TRASH_SVG + "<span>" + s.delMenu + "</span></button>";
     if (!items) return; // nothing permitted — never draw an empty menu
     pop.innerHTML = items;
-    group.appendChild(pop);
+    // owner bug report 2026-11-17: mounting inside the NAVBAR group left the
+    // dropdown outside .bca-root, so every --bca-* variable resolved to
+    // nothing — transparent card/items, currentColor borders, no red on the
+    // danger item (exactly the flat look in the owner's screenshot). All the
+    // other popups mount in root(); this one now does too. position:fixed
+    // keeps the screen placement identical.
+    root().appendChild(pop);
     menuOutside = (e) => {
       if (!pop.contains(e.target) && !e.target.closest(".bca-navmenu")) removeMenuDropdown();
     };
